@@ -254,7 +254,6 @@ class ImageReader:
                 center_x = (((start_x+end_x)//2) + x_shift)
                 center_y = (((start_y+end_y)//2) + y_shift)
                 blob_mat = grid[start_y:end_y, start_x:end_x]
-                print(f"blob_mat shape: {blob_mat.shape}")
                 blob_array.append(Blob(blob_mat, center_x, center_y, center_x-cx, center_y-cy, self.pixel_length))
         return Grid(blob_array)
 

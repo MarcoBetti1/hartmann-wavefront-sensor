@@ -10,55 +10,51 @@ from src.classes.imagedisplayer import ImageDisplayer
 from src.classes.zernikesolver import ZernikeSolver
 
 def test_init_image_reader():
-    #a = ImageReader('tests/images/diffraction_grid.png')
-    a = ImageReader('diffraction_grid.png')
+    a = ImageReader('tests/images/diffraction_grid.png')
     assert a.grid is not None
 
     idisp = ImageDisplayer(a)
 
-    print("# Displaying image and blobs #")
-    cv2.imshow('Grid Image', idisp.get_grid_image())
-    print("# Press a key to continue #")
-    cv2.waitKey()
-    cv2.destroyAllWindows()
+    #print("# Displaying image and blobs #")
+    #cv2.imshow('Grid Image', idisp.get_grid_image())
+    #print("# Press a key to continue #")
+    #cv2.waitKey()
+    #cv2.destroyAllWindows()
 
 def grid_vector_image():
-    #a = ImageReader('tests/images/diffraction_grid.png')
-    a = ImageReader('diffraction_grid.png')
+    a = ImageReader('tests/images/diffraction_grid.png')
 
     idisp = ImageDisplayer(a)
 
-    cv2.imshow('Regular Image', a.image)
-    cv2.waitKey()
-    print("# Displaying image and blobs #")
-    cv2.imshow('Grid Image', idisp.get_vector_image())
-    print("# Press a key to continue #")
-    cv2.waitKey()
-    cv2.destroyAllWindows()
+    #cv2.imshow('Regular Image', a.image)
+    #cv2.waitKey()
+    #print("# Displaying image and blobs #")
+    #cv2.imshow('Grid Image', idisp.get_vector_image())
+    #print("# Press a key to continue #")
+    #cv2.waitKey()
+    #cv2.destroyAllWindows()
 
 def test_wavefront_recon():
-    #a = ImageReader('tests/images/diffraction_grid.png')
-    a = ImageReader('diffraction_grid.png')
+    a = ImageReader('tests/images/diffraction_grid.png')
     idisp = ImageDisplayer(a)
     grid = a.grid
 
-    cv2.imshow('Grid Image', idisp.get_vector_image())
-    cv2.waitKey()
-    cv2.destroyAllWindows()
+    #cv2.imshow('Grid Image', idisp.get_vector_image())
+    #cv2.waitKey()
+    #cv2.destroyAllWindows()
 
     c = ZernikeSolver(grid).solve()
     for i in range(len(c)):
         print("C" + str(i) + ": " + str(c[i]))
 
 def test_diffraction_grid():
-    #a = ImageReader('tests/images/diffraction_grid.png')
-    a = ImageReader('diffraction_grid.png')
+    a = ImageReader('tests/images/diffraction_grid.png')
     idisp = ImageDisplayer(a)
     grid = a.grid
 
-    cv2.imshow('Grid Image', idisp.get_vector_image())
-    cv2.waitKey()
-    cv2.destroyAllWindows()
+    #cv2.imshow('Grid Image', idisp.get_vector_image())
+    #cv2.waitKey()
+    #cv2.destroyAllWindows()
 
     c = ZernikeSolver(grid).solve()
     for i in range(len(c)):

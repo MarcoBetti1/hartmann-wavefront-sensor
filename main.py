@@ -5,6 +5,6 @@ sys.path.append('./')
 
 import rhubarb.demosaic
 
-# Main program
+# Main programa
 if __name__ == "__main__":
     rhubarb.demosaic.start_cam()

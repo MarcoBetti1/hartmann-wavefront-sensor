@@ -32,7 +32,7 @@ class CircularAperture:
         R = np.sqrt(X**2 + Y**2)
         R[R==0] = np.finfo(float).eps
         pattern = (j1(k*R*a/distance)/(k*R*a/distance))**2
-        pattern = pattern * 1E3 # Aribtrary factor to increase z-magnitude (signal)
+        pattern = pattern * 1E3
         return pattern
     
     # @param pattern: the 2D diffraction pattern returned by the diffraction_pattern method
@@ -65,22 +65,24 @@ class CircularAperture:
             new_pattern = pattern
 
         padding_rows = [0] * len(new_pattern[0])
-        padding_rows = [padding_rows] * abs(cur_shift_y)
+        padding_rows = [padding_rows] * abs(cur_shift_y) 
+
         if cur_shift_y < 0:
-            new_pattern = np.vstack(tuple([padding_rows] + [new_pattern])) 
+            new_pattern = np.vstack(tuple([new_pattern] + [padding_rows])) 
             y_start = 0
             y_end = len(pattern)
         elif cur_shift_y > 0:
-            new_pattern = np.vstack(tuple([new_pattern]+ [padding_rows]))
+            new_pattern = np.vstack(tuple([padding_rows] + [new_pattern]))
             y_start = abs(cur_shift_y)
             y_end = len(new_pattern)
+        else:
+            new_pattern = new_pattern
         new_pattern = np.asarray(new_pattern)[y_start:y_end, x_start:x_end]
-
         return new_pattern
     
     # Util function to add padding to the image in case of shifts to ensure
     # kernel does not go out of bounds during cross-correlation calculation
-    def add_shift_padding(self, image):
+    def addShiftPadding(self, image):
         max_x_shift = max(np.absolute(np.reshape(self.shift_x, self.shift_x.size)))
         max_y_shift = max(np.absolute(np.reshape(self.shift_y, self.shift_y.size)))
 
@@ -113,13 +115,12 @@ class CircularAperture:
         for i in range(len(cols)):
             cur_row = []
             cur_row.append(self.apply_shift(col_pad[i], i, 0))
-            row_i = 1
             for j in range(len(cols[i])):
-                cur_row.append(self.apply_shift(cols[i][j], i, row_i+j))
+                cur_row.append(self.apply_shift(cols[i][j], i, j))
             cur_row.append(self.apply_shift(col_pad[i], i, -1))
             image.append(np.hstack(tuple(cur_row)))
         image = np.vstack(tuple(image))
-        image = self.add_shift_padding(image)
+        image = self.addShiftPadding(image)
         return image
 
 
@@ -129,12 +130,12 @@ if __name__ == "__main__":
         0,  # Z1
         0,  # Z2
         0,  # Z3
-        -0.0005,  # Z4
-        0.0005,  # Z5
+        0.005,  # Z4
+        0,  # Z5
         0,  # Z6
-        0.0005,  # Z7
+        0,  # Z7
         0,  # Z8
-        0.0005,  # Z9
+        0,  # Z9
         0,  # Z10
         0,  # Z11
         0,  # Z12
@@ -143,11 +144,11 @@ if __name__ == "__main__":
     ])
     shift_x, shift_y = zernike_displacement(coeff)
 
-    ## Example for a 152.4µm diameter aperture, 20mm away, using 0.6µm wavelength light
-    aperture = CircularAperture(152.4, 5, np.round(shift_x).astype(int), np.round(shift_y).astype(int))
-    #aperture = CircularAperture(152.4, 5)
-    pattern = aperture.diffraction_pattern(0.6, 2E3)
-    #aperture.plot_diffraction_pattern(pattern)
+    ## Example for a 152.4µm diameter aperture, 3mm away, using 0.6µm wavelength light
+    # aperture = CircularAperture(152.4, 5, np.round(shift_x).astype(int), np.round(shift_y).astype(int))
+    aperture = CircularAperture(152.4, 5)
+    pattern = aperture.diffraction_pattern(0.6, 3E3)
+    # aperture.plot_diffraction_pattern(pattern)
     image = aperture.create_diffraction_grid(pattern)
     # Create the diffraction pattern plot
 
